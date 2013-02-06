@@ -37,7 +37,22 @@ def trips_with_2_legs
   trips.each do |trip|
     puts "#{@origin} - #{trip.last.first} - #{@origin}   $#{trip.last.last.to_i+trip.first.last.to_i}"
   end
-  round_trips
+end
+
+def trips_with_3_legs
+  departing_flights = flights_from(@origin)
+  returning_flights = flights_to(@origin)
+  trips = departing_flights.map{|f|[@origin,connections(f,returning_flights)]}.reject{|t|t.last.empty?}
+
+  flight_count = trips.map(&:last).inject(0){|s,e|s += e.count}
+
+  print "\b"*20
+  puts "\n*** #{flight_count} roundtrip flights with 3 legs ***"
+  trips.each do |trip|
+    trip.last.each do |connector|
+      puts "#{@origin} - #{connector[0]} - #{connector[1]} - #{@origin}   $"
+    end
+  end
 end
 
 def main
@@ -46,6 +61,7 @@ def main
   else
     @flights = File.open(FNAME, "rb").read.scan(REGX).compact
     @origin = ARGV[0]
-    flights = trips_with_2_legs
+    trips_with_2_legs
+    trips_with_3_legs
   end
 end;main
