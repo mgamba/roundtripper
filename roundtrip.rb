@@ -6,7 +6,10 @@
 #FNAME = "JetBlue   The So Long Summer Sale.html"
 #REGX = /data-od\="([^,]*),([^"]*)[^\$]*\$([\d]*)/
 
-FNAME = "JetBlue   The Fly Somewhere New Sale.html"
+#FNAME = "JetBlue   The Fly Somewhere New Sale.html"
+#REGX = /data-od\="([^,]*),([^"]*)[^\$]*\$([\d]*)/
+
+FNAME = "JetBlue   For The Love of Fares Sale.html"
 REGX = /data-od\="([^,]*),([^"]*)[^\$]*\$([\d]*)/
 
 def flights_from(airport)
@@ -35,7 +38,7 @@ def trips_with_2_legs
   print "\b"*20
   puts "\n*** #{flight_count} roundtrip flights with 2 legs ***"
   trips.each do |trip|
-    puts "#{@origin} - #{trip.last.first} - #{@origin}   $#{trip.last.last.to_i+trip.first.last.to_i}"
+    puts "#{@origin} -> #{trip.last.first} -> #{@origin}   $#{trip.last.last.to_i+trip.first.last.to_i}"
   end
 end
 
@@ -50,7 +53,7 @@ def trips_with_3_legs
   puts "\n*** #{flight_count} roundtrip flights with 3 legs ***"
   trips.each do |trip|
     trip.last.each do |connector|
-      puts "#{@origin} - #{connector[0]} - #{connector[1]} - #{@origin}   $"
+      puts "#{@origin} -> #{connector[0]} -> #{connector[1]} - #{@origin}   $"
     end
   end
 end
