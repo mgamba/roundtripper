@@ -1,10 +1,14 @@
 #! /usr/bin/ruby
 
-DMAX = 3
-FNAME_HOLIDAY_RECOVERY = "JetBlue   The Holiday Recovery Sale.html"
-REGX_HOLIDAY_RECOVERY = /Now\([^,],(\d*),&quot;(\w*)&quot;,&quot;(\w*)/
-FNAME_SUMMER_SALE = "JetBlue   The So Long Summer Sale.html"
-REGX_SUMMER_SALE = /data-od\="([^,]*),([^"]*)[^\$]*\$([\d]*)/
+DMAX = 2
+#FNAME = "JetBlue   The Holiday Recovery Sale.html"
+#REGX = /Now\([^,],(\d*),&quot;(\w*)&quot;,&quot;(\w*)/
+
+#FNAME = "JetBlue   The So Long Summer Sale.html"
+#REGX = /data-od\="([^,]*),([^"]*)[^\$]*\$([\d]*)/
+
+FNAME = "JetBlue   The Fly Somewhere New Sale.html"
+REGX = /data-od\="([^,]*),([^"]*)[^\$]*\$([\d]*)/
 
 def show flights, depth=0, ttrip=nil
   round_trips = []
@@ -34,9 +38,12 @@ def show flights, depth=0, ttrip=nil
 end
 
 def main
-  flights = show(File.open(FNAME_HOLIDAY_RECOVERY, "rb").read.scan(REGX_HOLIDAY_RECOVERY).compact).flatten.compact.uniq.sort
-  #flights = show(File.open(FNAME_SUMMER_SALE, "rb").read.scan(REGX_SUMMER_SALE).compact).flatten.compact.uniq.sort
-  print "\b"*4
-  puts "#{flights.count > 0 ? '*** ' : nil}#{flights.count} roundtrip flights with maximum of #{DMAX} legs"
-  puts flights
+  if ARGV.empty?
+    puts "need to specify final destination.  ex: ruby rountrip.rb JFK"
+  else
+    flights = show(File.open(FNAME, "rb").read.scan(REGX).compact).flatten.compact.uniq.sort
+    print "\b"*20
+    puts "#{flights.count > 0 ? '*** ' : nil}#{flights.count} roundtrip flights with maximum of #{DMAX} legs"
+    puts flights
+  end
 end;main
